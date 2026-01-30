@@ -16,13 +16,18 @@ export default function Section({ title, data, filterSource, type }) {
   };
 
   useEffect(() => {
-    if (filterSource) {
-      filterSource().then((response) => {
-        const { data } = response;
-        setFilters([...filters, ...data]);
-      });
-    }
-  }, []);
+  if (!filterSource) return;
+
+  filterSource().then((response) => {
+    const { data } = response;
+
+    setFilters((prevFilters) => [
+      ...prevFilters,
+      ...data,
+    ]);
+  });
+}, [filterSource]);
+
 
   const showFilters = filters.length > 1; //true
   const cardsToRender = data.filter((card) =>
